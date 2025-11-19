@@ -107,19 +107,24 @@ export const ChatMessage = ({ message, onEdit, onCancelEdit }: ChatMessageProps)
                       <Button
                         size="sm"
                         variant="ghost"
-                        className="absolute right-2 top-2 opacity-0 group-hover:opacity-100 transition-opacity"
+                        className="absolute right-1 top-1 z-10 opacity-100 sm:opacity-0 sm:group-hover:opacity-100 transition-opacity bg-gray-800/90 hover:bg-gray-700/90 backdrop-blur-sm"
                         onClick={() => copyToClipboard(codeString, codeId)}
                       >
                         {copied === codeId ? (
-                          <Check className="w-4 h-4 text-green-500" />
+                          <Check className="w-3 h-3 sm:w-4 sm:h-4 text-green-500" />
                         ) : (
-                          <Copy className="w-4 h-4" />
+                          <Copy className="w-3 h-3 sm:w-4 sm:h-4" />
                         )}
                       </Button>
                       <SyntaxHighlighter
                         style={vscDarkPlus as any}
                         language={match[1]}
                         PreTag="div"
+                        customStyle={{
+                          margin: 0,
+                          borderRadius: '0.5rem',
+                          fontSize: '0.8125rem',
+                        }}
                       >
                         {codeString}
                       </SyntaxHighlighter>
