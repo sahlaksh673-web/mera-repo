@@ -1651,41 +1651,83 @@
   .prose {
     font-size: 0.9375rem !important; /* 15px - comfortable reading size */
     line-height: 1.6 !important;
+    word-wrap: break-word !important;
+    overflow-wrap: break-word !important;
+    word-break: break-word !important;
   }
 
   .prose p {
     font-size: 0.9375rem !important;
     margin-bottom: 0.75rem !important;
+    word-wrap: break-word !important;
+    overflow-wrap: break-word !important;
   }
 
   .prose code {
-    font-size: 0.875rem !important; /* 14px for code blocks */
+    font-size: 0.8125rem !important; /* 13px for inline code */
+    word-wrap: break-word !important;
+    overflow-wrap: break-word !important;
+    white-space: pre-wrap !important;
   }
 
   .prose pre {
-    font-size: 0.875rem !important;
+    font-size: 0.8125rem !important; /* 13px for code blocks */
     padding: 0.75rem !important;
+    overflow-x: auto !important;
+    max-width: 100% !important;
+    margin-left: -0.75rem !important;
+    margin-right: -0.75rem !important;
+  }
+
+  .prose pre code {
+    white-space: pre !important;
+    word-wrap: normal !important;
+    overflow-wrap: normal !important;
   }
 
   .prose h1 {
-    font-size: 1.25rem !important;
+    font-size: 1.125rem !important;
+    word-wrap: break-word !important;
+    overflow-wrap: break-word !important;
   }
 
   .prose h2 {
-    font-size: 1.125rem !important;
+    font-size: 1rem !important;
+    word-wrap: break-word !important;
+    overflow-wrap: break-word !important;
   }
 
   .prose h3 {
-    font-size: 1rem !important;
+    font-size: 0.9375rem !important;
+    word-wrap: break-word !important;
+    overflow-wrap: break-word !important;
   }
 
   .prose ul, .prose ol {
     font-size: 0.9375rem !important;
-    padding-left: 1.25rem !important;
+    padding-left: 1rem !important;
+    word-wrap: break-word !important;
+    overflow-wrap: break-word !important;
   }
 
   .prose li {
     margin-bottom: 0.5rem !important;
+    word-wrap: break-word !important;
+    overflow-wrap: break-word !important;
+  }
+
+  /* Ensure code blocks scroll horizontally on mobile */
+  .prose pre {
+    -webkit-overflow-scrolling: touch !important;
+  }
+
+  /* Better spacing for chat messages on mobile */
+  .prose strong {
+    font-weight: 600 !important;
+  }
+
+  .prose em {
+    font-style: italic !important;
   }
 }
 

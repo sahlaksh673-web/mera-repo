@@ -40,13 +40,13 @@ export const ChatMessage = ({ message, onEdit, onCancelEdit }: ChatMessageProps)
   return (
     <div className={`flex gap-4 p-4 rounded-lg ${message.role === "user" ? "bg-blue-900/30 border border-blue-700" : "bg-gray-900/50 border border-gray-700"}`}>
       <div className={`flex-shrink-0 w-8 h-8 rounded-full flex items-center justify-center ${
-        message.role === "user" 
-          ? "bg-blue-600 text-white" 
+        message.role === "user"
+          ? "bg-blue-600 text-white"
           : "bg-gradient-to-br from-purple-600 to-pink-600 text-white"
       }`}>
         {message.role === "user" ? "U" : "AI"}
       </div>
-      
+
       <div className="flex-1 min-w-0">
         <div className="flex items-center gap-2 mb-2">
           <span className="font-semibold text-sm text-white">
