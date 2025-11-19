@@ -1645,6 +1645,48 @@
   h6 {
     font-size: 0.875rem !important;
   }
+
+  /* AI Assistant mobile optimizations */
+  /* Chat message text sizes for mobile */
+  .prose {
+    font-size: 0.9375rem !important; /* 15px - comfortable reading size */
+    line-height: 1.6 !important;
+  }
+
+  .prose p {
+    font-size: 0.9375rem !important;
+    margin-bottom: 0.75rem !important;
+  }
+
+  .prose code {
+    font-size: 0.875rem !important; /* 14px for code blocks */
+  }
+
+  .prose pre {
+    font-size: 0.875rem !important;
+    padding: 0.75rem !important;
+  }
+
+  .prose h1 {
+    font-size: 1.25rem !important;
+  }
+
+  .prose h2 {
+    font-size: 1.125rem !important;
+  }
+
+  .prose h3 {
+    font-size: 1rem !important;
+  }
+
+  .prose ul, .prose ol {
+    font-size: 0.9375rem !important;
+    padding-left: 1.25rem !important;
+  }
+
+  .prose li {
+    margin-bottom: 0.5rem !important;
+  }
 }
 
 /* Touch-friendly improvements */

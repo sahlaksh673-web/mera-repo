@@ -638,7 +638,7 @@ export default function StudentAIAssistant() {
               value={inputMessage}
               onChange={(e) => setInputMessage(e.target.value)}
               placeholder="Ask me anything... (Text, code, questions, analysis)"
-              className="flex-1 min-h-[80px] max-h-48 bg-gray-800 border-2 border-gray-600 text-white placeholder:text-gray-400 resize-none rounded-xl p-4 text-base focus:border-blue-500 transition-all duration-200 scrollbar-thin scrollbar-thumb-blue-500 scrollbar-track-gray-700"
+              className="flex-1 min-h-[80px] max-h-48 bg-gray-800 border-2 border-gray-600 text-white placeholder:text-gray-400 resize-none rounded-xl p-4 text-base md:text-base text-[15px] focus:border-blue-500 transition-all duration-200 scrollbar-thin scrollbar-thumb-blue-500 scrollbar-track-gray-700"
               style={{
                 scrollbarWidth: 'thin',
                 scrollbarColor: '#3b82f6 #374151'
