@@ -2574,15 +2574,15 @@ Teacher ID: ${teacherId}`);
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.2 }}
-              className="mt-8"
+              className="mt-4 sm:mt-8"
             >
-              <div className="bg-card/95 backdrop-blur-md rounded-xl p-6 border border-border/50">
-                <div className="flex items-center justify-between mb-6">
+              <div className="bg-card/95 backdrop-blur-md rounded-lg sm:rounded-xl p-4 sm:p-6 border border-border/50">
+                <div className="flex flex-col sm:flex-row sm:items-center justify-between mb-4 sm:mb-6 gap-3 sm:gap-0">
                   <div>
-                    <h2 className="text-lg font-heading font-bold text-foreground">
+                    <h2 className="text-base sm:text-lg font-heading font-bold text-foreground">
                       Manage Teacher IDs
                     </h2>
-                    <p className="text-sm text-muted-foreground mt-1">
+                    <p className="text-xs sm:text-sm text-muted-foreground mt-1">
                       View and manage teacher login credentials and access control
                     </p>
                   </div>
@@ -2590,40 +2590,42 @@ Teacher ID: ${teacherId}`);
                     onClick={() => setActiveSection("dashboard")}
                     variant="outline"
                     size="sm"
+                    className="w-full sm:w-auto"
                   >
                     Back to Dashboard
                   </Button>
                 </div>
 
                 {/* Redirect to Manage Teacher ID page */}
-                <div className="text-center py-8">
-                  <IdCard className="h-16 w-16 mx-auto mb-4 text-gold" />
-                  <h3 className="text-xl font-bold mb-2">Teacher ID Management</h3>
-                  <p className="text-muted-foreground mb-6">
+                <div className="text-center py-6 sm:py-8">
+                  <IdCard className="h-12 w-12 sm:h-16 sm:w-16 mx-auto mb-3 sm:mb-4 text-gold" />
+                  <h3 className="text-lg sm:text-xl font-bold mb-2 text-foreground">Teacher ID Management</h3>
+                  <p className="text-sm sm:text-base text-muted-foreground mb-4 sm:mb-6 px-4">
                     Access the comprehensive teacher ID management system to view, edit, and control teacher login credentials.
                   </p>
-                  <div className="flex gap-4 justify-center">
+                  <div className="flex flex-col sm:flex-row gap-3 sm:gap-4 justify-center px-4">
                     <Button
                       onClick={() => window.open('/manage-teacher-id', '_blank')}
-                      className="bg-gradient-to-r from-gold to-yellow-500 text-black hover:from-gold/90 hover:to-yellow-500/90"
+                      className="bg-gradient-to-r from-gold to-yellow-500 text-black hover:from-gold/90 hover:to-yellow-500/90 w-full sm:w-auto"
                     >
                       <IdCard className="h-4 w-4 mr-2" />
-                      Open Teacher ID Manager
+                      <span className="text-sm sm:text-base">Open Teacher ID Manager</span>
                     </Button>
                     <Button
                       onClick={() => setActiveSection("createteacherid")}
                       variant="outline"
+                      className="w-full sm:w-auto"
                     >
                       <UserPlus className="h-4 w-4 mr-2" />
-                      Create New Teacher ID
+                      <span className="text-sm sm:text-base">Create New Teacher ID</span>
                     </Button>
                   </div>
                 </div>
 
                 {/* Quick Stats */}
-                <div className="grid grid-cols-1 md:grid-cols-4 gap-4 mt-8">
-                  <div className="bg-muted/20 rounded-lg p-4 text-center">
-                    <div className="text-2xl font-bold text-primary">
+                <div className="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-4 gap-3 sm:gap-4 mt-6 sm:mt-8">
+                  <div className="bg-muted/20 rounded-lg p-3 sm:p-4 text-center">
+                    <div className="text-xl sm:text-2xl font-bold text-foreground">
                       {(() => {
                         try {
                           const authTeachers = JSON.parse(localStorage.getItem('royal-academy-auth-teachers') || '[]');
@@ -2633,10 +2635,10 @@ Teacher ID: ${teacherId}`);
                         }
                       })()}
                     </div>
-                    <div className="text-sm text-muted-foreground">Total Teacher IDs</div>
+                    <div className="text-xs sm:text-sm text-muted-foreground">Total Teacher IDs</div>
                   </div>
-                  <div className="bg-muted/20 rounded-lg p-4 text-center">
-                    <div className="text-2xl font-bold text-green-600">
+                  <div className="bg-muted/20 rounded-lg p-3 sm:p-4 text-center">
+                    <div className="text-xl sm:text-2xl font-bold text-green-500">
                       {(() => {
                         try {
                           const authTeachers = JSON.parse(localStorage.getItem('royal-academy-auth-teachers') || '[]');
@@ -2646,10 +2648,10 @@ Teacher ID: ${teacherId}`);
                         }
                       })()}
                     </div>
-                    <div className="text-sm text-muted-foreground">Active IDs</div>
+                    <div className="text-xs sm:text-sm text-muted-foreground">Active IDs</div>
                   </div>
-                  <div className="bg-muted/20 rounded-lg p-4 text-center">
-                    <div className="text-2xl font-bold text-red-600">
+                  <div className="bg-muted/20 rounded-lg p-3 sm:p-4 text-center">
+                    <div className="text-xl sm:text-2xl font-bold text-red-500">
                       {(() => {
                         try {
                           const authTeachers = JSON.parse(localStorage.getItem('royal-academy-auth-teachers') || '[]');
@@ -2659,10 +2661,10 @@ Teacher ID: ${teacherId}`);
                         }
                       })()}
                     </div>
-                    <div className="text-sm text-muted-foreground">Banned IDs</div>
+                    <div className="text-xs sm:text-sm text-muted-foreground">Banned IDs</div>
                   </div>
-                  <div className="bg-muted/20 rounded-lg p-4 text-center">
-                    <div className="text-2xl font-bold text-yellow-600">
+                  <div className="bg-muted/20 rounded-lg p-3 sm:p-4 text-center">
+                    <div className="text-xl sm:text-2xl font-bold text-yellow-500">
                       {(() => {
                         try {
                           const authTeachers = JSON.parse(localStorage.getItem('royal-academy-auth-teachers') || '[]');
@@ -2672,18 +2674,19 @@ Teacher ID: ${teacherId}`);
                         }
                       })()}
                     </div>
-                    <div className="text-sm text-muted-foreground">Login Issues</div>
+                    <div className="text-xs sm:text-sm text-muted-foreground">Login Issues</div>
                   </div>
                 </div>
 
                 {/* Quick Actions */}
-                <div className="mt-6 p-4 bg-muted/10 rounded-lg">
-                  <h4 className="font-semibold mb-3">Quick Actions</h4>
-                  <div className="flex flex-wrap gap-2">
+                <div className="mt-4 sm:mt-6 p-3 sm:p-4 bg-muted/10 rounded-lg">
+                  <h4 className="font-semibold mb-2 sm:mb-3 text-sm sm:text-base text-foreground">Quick Actions</h4>
+                  <div className="flex flex-col sm:flex-row sm:flex-wrap gap-2">
                     <Button
                       size="sm"
                       variant="outline"
                       onClick={() => window.open('/manage-teacher-id', '_blank')}
+                      className="w-full sm:w-auto text-xs sm:text-sm"
                     >
                       View All Teacher IDs
                     </Button>
@@ -2691,6 +2694,7 @@ Teacher ID: ${teacherId}`);
                       size="sm"
                       variant="outline"
                       onClick={() => setActiveSection("createteacherid")}
+                      className="w-full sm:w-auto text-xs sm:text-sm"
                     >
                       Create New ID
                     </Button>
@@ -2698,6 +2702,7 @@ Teacher ID: ${teacherId}`);
                       size="sm"
                       variant="outline"
                       onClick={() => setActiveSection("manageteachers")}
+                      className="w-full sm:w-auto text-xs sm:text-sm"
                     >
                       Manage Teachers
                     </Button>
