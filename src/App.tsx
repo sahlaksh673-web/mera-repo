@@ -54,6 +54,7 @@ const StudentNotifications = lazy(() => import("./pages/StudentNotifications"));
 const StudentTimetable = lazy(() => import("./pages/StudentTimetable"));
 const StudentQuiz = lazy(() => import("./pages/StudentQuiz"));
 const StudentMyProfile = lazy(() => import("./pages/StudentMyProfile"));
+const StudentAIAssistant = lazy(() => import("./pages/StudentAIAssistant"));
 const AuthLanding = lazy(() => import("./pages/AuthLanding"));
 const CurriculumGuide = lazy(() => import("./pages/CurriculumGuide"));
 const CreateTeacherID = lazy(() => import("./pages/CreateTeacherID"));
@@ -566,6 +567,21 @@ function AnimatedRoutes() {
                 transition={{ duration: 0 }}
               >
                 <StudentMyProfile />
+              </motion.div>
+            </ProtectedRoute>
+          } />
+          <Route path="/student-ai-assistant" element={
+            <ProtectedRoute
+              authKey="studentAuth"
+              redirectTo="/student-login"
+            >
+              <motion.div
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1, y: 0 }}
+                exit={{ opacity: 0 }}
+                transition={{ duration: 0 }}
+              >
+                <StudentAIAssistant />
               </motion.div>
             </ProtectedRoute>
           } />
