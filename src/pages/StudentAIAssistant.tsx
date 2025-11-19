@@ -431,7 +431,7 @@ export default function StudentAIAssistant() {
             <h1 className="text-2xl font-bold bg-gradient-to-r from-blue-400 to-purple-400 bg-clip-text text-transparent">
               AI Assistant
             </h1>
-            <p className="text-sm text-gray-400">Powered by Gemini 2.0 Flash</p>
+            <p className="text-sm text-gray-400">Powered by Gemini 2.5 Pro</p>
           </div>
           
           <Select value={language} onValueChange={setLanguage}>

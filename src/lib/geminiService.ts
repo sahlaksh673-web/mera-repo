@@ -23,7 +23,7 @@ export class GeminiService {
   private model;
   
   constructor() {
-    this.model = genAI.getGenerativeModel({ model: "gemini-2.0-flash-exp" });
+    this.model = genAI.getGenerativeModel({ model: "gemini-2.5-pro" });
   }
 
   async sendMessage(
