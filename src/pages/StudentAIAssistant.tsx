@@ -1,24 +1,26 @@
 import { useState, useRef, useEffect } from "react";
-import { 
-  Send, 
-  Image, 
-  Camera, 
-  Mic, 
-  Volume2, 
-  VolumeX, 
-  Plus, 
-  Trash2, 
-  Edit2, 
-  Check, 
+import {
+  Send,
+  Image,
+  Camera,
+  Mic,
+  Volume2,
+  VolumeX,
+  Plus,
+  Trash2,
+  Edit2,
+  Check,
   X,
   MessageSquare,
-  AlertTriangle
+  AlertTriangle,
+  PanelLeftClose,
+  PanelRightClose
 } from "lucide-react";
 import { AudioRecorder } from "react-audio-voice-recorder";
 import { Button } from "../components/ui/button";
 import { Textarea } from "../components/ui/textarea";
 import { ScrollArea } from "../components/ui/scroll-area";
-import { 
+import {
   Select,
   SelectContent,
   SelectItem,
@@ -37,9 +39,9 @@ import {
 } from "../components/ui/alert-dialog";
 import { Input } from "../components/ui/input";
 import { ChatMessage } from "../components/ChatMessage";
-import { 
-  geminiService, 
-  Message, 
+import {
+  geminiService,
+  Message,
   ChatSession,
   loadChatSessions,
   saveChatSessions,
@@ -61,7 +63,8 @@ export default function StudentAIAssistant() {
   const [editingSessionId, setEditingSessionId] = useState<string | null>(null);
   const [editingSessionName, setEditingSessionName] = useState("");
   const [showCamera, setShowCamera] = useState(false);
-  
+  const [isSidebarOpen, setIsSidebarOpen] = useState(true); // State for sidebar visibility
+
   const fileInputRef = useRef<HTMLInputElement>(null);
   const videoRef = useRef<HTMLVideoElement>(null);
   const canvasRef = useRef<HTMLCanvasElement>(null);
@@ -154,7 +157,7 @@ export default function StudentAIAssistant() {
   const handleImageSelect = (e: React.ChangeEvent<HTMLInputElement>) => {
     const files = Array.from(e.target.files || []);
     const imageFiles = files.filter(file => file.type.startsWith("image/"));
-    
+
     if (imageFiles.length > 0) {
       setSelectedImages(imageFiles);
       const previews = imageFiles.map(file => URL.createObjectURL(file));
@@ -228,7 +231,7 @@ export default function StudentAIAssistant() {
     }
 
     const utterance = new SpeechSynthesisUtterance(text);
-    
+
     const voices = window.speechSynthesis.getVoices();
     if (language === "hi") {
       const hindiVoice = voices.find(voice => voice.lang.includes("hi"));
@@ -240,7 +243,7 @@ export default function StudentAIAssistant() {
 
     utterance.onend = () => setIsSpeaking(false);
     utterance.onerror = () => setIsSpeaking(false);
-    
+
     speechSynthesisRef.current = utterance;
     window.speechSynthesis.speak(utterance);
     setIsSpeaking(true);
@@ -260,9 +263,9 @@ export default function StudentAIAssistant() {
 
   const confirmDeleteSession = () => {
     if (!sessionToDelete) return;
-    
+
     const updated = sessions.filter(s => s.id !== sessionToDelete);
-    
+
     if (updated.length === 0) {
       const newSession = createNewSession();
       setSessions([newSession]);
@@ -275,7 +278,7 @@ export default function StudentAIAssistant() {
       }
       saveChatSessions(updated);
     }
-    
+
     setSessionToDelete(null);
   };
 
@@ -286,13 +289,13 @@ export default function StudentAIAssistant() {
 
   const saveSessionName = () => {
     if (!editingSessionId) return;
-    
+
     const updated = sessions.map(s =>
       s.id === editingSessionId
         ? { ...s, name: editingSessionName }
         : s
     );
-    
+
     setSessions(updated);
     saveChatSessions(updated);
     setEditingSessionId(null);
@@ -340,100 +343,114 @@ export default function StudentAIAssistant() {
 
   return (
     <div className="flex h-screen bg-black">
-      <div className="w-64 bg-gray-900 border-r border-gray-700 flex flex-col">
-        <div className="p-4 border-b border-gray-700">
-          <Button onClick={handleNewChat} className="w-full bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 text-white">
-            <Plus className="w-4 h-4 mr-2" />
-            New Chat
-          </Button>
-        </div>
+      {/* Sidebar */}
+      {isSidebarOpen && (
+        <div className="w-64 bg-gray-900 border-r border-gray-700 flex flex-col">
+          <div className="p-4">
+            <Button onClick={handleNewChat} className="w-full bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 text-white">
+              <Plus className="w-4 h-4 mr-2" />
+              New Chat
+            </Button>
+          </div>
 
-        <ScrollArea className="flex-1 p-2">
-          {sessions.map(session => (
-            <div
-              key={session.id}
-              className={`p-3 mb-2 rounded-lg cursor-pointer transition-colors ${
-                currentSessionId === session.id
-                  ? "bg-blue-900 text-white"
-                  : "hover:bg-gray-800 text-gray-300"
-              }`}
-              onClick={() => setCurrentSessionId(session.id)}
-            >
-              {editingSessionId === session.id ? (
-                <div className="flex gap-1" onClick={(e) => e.stopPropagation()}>
-                  <Input
-                    value={editingSessionName}
-                    onChange={(e) => setEditingSessionName(e.target.value)}
-                    className="h-7 text-sm"
-                    autoFocus
-                  />
-                  <Button size="sm" variant="ghost" onClick={saveSessionName}>
-                    <Check className="w-3 h-3" />
-                  </Button>
-                  <Button size="sm" variant="ghost" onClick={() => setEditingSessionId(null)}>
-                    <X className="w-3 h-3" />
-                  </Button>
-                </div>
-              ) : (
-                <div>
-                  <div className="flex items-center justify-between">
-                    <MessageSquare className="w-4 h-4 text-gray-400" />
-                    <div className="flex gap-1">
-                      <Button
-                        size="sm"
-                        variant="ghost"
-                        className="h-6 w-6 p-0 text-gray-300 hover:text-white"
-                        onClick={(e) => {
-                          e.stopPropagation();
-                          handleRenameSession(session.id, session.name);
-                        }}
-                      >
-                        <Edit2 className="w-3 h-3" />
-                      </Button>
-                      <Button
-                        size="sm"
-                        variant="ghost"
-                        className="h-6 w-6 p-0 text-red-400 hover:text-red-300"
-                        onClick={(e) => {
-                          e.stopPropagation();
-                          handleDeleteSession(session.id);
-                        }}
-                      >
-                        <Trash2 className="w-3 h-3" />
-                      </Button>
-                    </div>
+          <ScrollArea className="flex-1 p-2">
+            {sessions.map(session => (
+              <div
+                key={session.id}
+                className={`p-3 mb-2 rounded-lg cursor-pointer transition-colors ${
+                  currentSessionId === session.id
+                    ? "bg-blue-900 text-white"
+                    : "hover:bg-gray-800 text-gray-300"
+                }`}
+                onClick={() => setCurrentSessionId(session.id)}
+              >
+                {editingSessionId === session.id ? (
+                  <div className="flex gap-1" onClick={(e) => e.stopPropagation()}>
+                    <Input
+                      value={editingSessionName}
+                      onChange={(e) => setEditingSessionName(e.target.value)}
+                      className="h-7 text-sm"
+                      autoFocus
+                    />
+                    <Button size="sm" variant="ghost" onClick={saveSessionName}>
+                      <Check className="w-3 h-3" />
+                    </Button>
+                    <Button size="sm" variant="ghost" onClick={() => setEditingSessionId(null)}>
+                      <X className="w-3 h-3" />
+                    </Button>
                   </div>
-                  <p className="text-sm font-medium mt-1 truncate text-white">{session.name}</p>
-                  <p className="text-xs text-gray-400">
-                    {session.messages.length} messages
-                  </p>
-                </div>
-              )}
-            </div>
-          ))}
-        </ScrollArea>
+                ) : (
+                  <div>
+                    <div className="flex items-center justify-between">
+                      <MessageSquare className="w-4 h-4 text-gray-400" />
+                      <div className="flex gap-1">
+                        <Button
+                          size="sm"
+                          variant="ghost"
+                          className="h-6 w-6 p-0 text-gray-300 hover:text-white"
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            handleRenameSession(session.id, session.name);
+                          }}
+                        >
+                          <Edit2 className="w-3 h-3" />
+                        </Button>
+                        <Button
+                          size="sm"
+                          variant="ghost"
+                          className="h-6 w-6 p-0 text-red-400 hover:text-red-300"
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            handleDeleteSession(session.id);
+                          }}
+                        >
+                          <Trash2 className="w-3 h-3" />
+                        </Button>
+                      </div>
+                    </div>
+                    <p className="text-sm font-medium mt-1 truncate text-white">{session.name}</p>
+                    <p className="text-xs text-gray-400">
+                      {session.messages.length} messages
+                    </p>
+                  </div>
+                )}
+              </div>
+            ))}
+          </ScrollArea>
 
-        <div className="p-4 border-t border-gray-700">
-          <Button
-            variant="destructive"
-            className="w-full bg-red-600 hover:bg-red-700 text-white"
-            onClick={handleClearAllChats}
-          >
-            <Trash2 className="w-4 h-4 mr-2" />
-            Clear All Chats
-          </Button>
+          <div className="p-4 border-t border-gray-700">
+            <Button
+              variant="destructive"
+              className="w-full bg-red-600 hover:bg-red-700 text-white"
+              onClick={handleClearAllChats}
+            >
+              <Trash2 className="w-4 h-4 mr-2" />
+              Clear All Chats
+            </Button>
+          </div>
         </div>
-      </div>
+      )}
 
-      <div className="flex-1 flex flex-col">
+      {/* Main content area */}
+      <div className="flex-1 flex flex-col overflow-hidden">
         <div className="bg-gray-900 border-b border-gray-700 p-4 flex items-center justify-between">
+          {/* Sidebar toggle button */}
+          <Button
+            variant="ghost"
+            size="icon"
+            onClick={() => setIsSidebarOpen(!isSidebarOpen)}
+            className="text-gray-400 hover:text-white mr-4"
+          >
+            {isSidebarOpen ? <PanelLeftClose className="w-6 h-6" /> : <PanelRightClose className="w-6 h-6" />}
+          </Button>
+
           <div>
             <h1 className="text-2xl font-bold bg-gradient-to-r from-blue-400 to-purple-400 bg-clip-text text-transparent">
               AI Assistant
             </h1>
             <p className="text-sm text-gray-400">Powered by Gemini 2.5 Pro</p>
           </div>
-          
+
           <Select value={language} onValueChange={setLanguage}>
             <SelectTrigger className="w-48 bg-gray-800 text-white border-gray-700">
               <SelectValue placeholder="Select language" />
@@ -447,7 +464,7 @@ export default function StudentAIAssistant() {
           </Select>
         </div>
 
-        <ScrollArea className="flex-1 p-4 bg-black">
+        <ScrollArea className="flex-1 p-4 bg-black overflow-y-auto">
           {currentSession?.messages.length === 0 ? (
             <div className="h-full flex items-center justify-center">
               <div className="text-center max-w-md">
@@ -456,7 +473,7 @@ export default function StudentAIAssistant() {
                 </div>
                 <h2 className="text-2xl font-bold mb-2 text-white">Welcome to AI Assistant</h2>
                 <p className="text-gray-300 mb-4">
-                  I can help you with coding, answer questions, analyze images, transcribe audio, and search the internet. 
+                  I can help you with coding, answer questions, analyze images, transcribe audio, and search the internet.
                   I speak English, Hinglish, and Hindi!
                 </p>
                 <div className="grid grid-cols-2 gap-2 text-sm text-left">
@@ -491,7 +508,7 @@ export default function StudentAIAssistant() {
                     <Button
                       size="sm"
                       variant="ghost"
-                      className="absolute right-2 top-2 opacity-0 group-hover:opacity-100 transition-opacity"
+                      className="absolute right-2 top-2 opacity-0 group-hover:opacity-100 transition-opacity md:right-8"
                       onClick={() => speakResponse(message.content)}
                     >
                       {isSpeaking ? (
@@ -520,8 +537,8 @@ export default function StudentAIAssistant() {
 
         {showCamera && (
           <div className="absolute inset-0 bg-black/80 flex items-center justify-center z-50">
-            <div className="bg-white dark:bg-gray-800 rounded-lg p-4 max-w-2xl">
-              <video ref={videoRef} autoPlay className="rounded-lg mb-4 w-full" />
+            <div className="bg-white dark:bg-gray-800 rounded-lg p-4 max-w-2xl w-full mx-4">
+              <video ref={videoRef} autoPlay playsInline className="rounded-lg mb-4 w-full aspect-video" />
               <div className="flex gap-2 justify-center">
                 <Button onClick={capturePhoto} className="bg-blue-600 hover:bg-blue-700">
                   <Camera className="w-4 h-4 mr-2" />
@@ -537,7 +554,7 @@ export default function StudentAIAssistant() {
 
         <canvas ref={canvasRef} className="hidden" />
 
-        <div className="bg-gray-900 border-t border-gray-700 p-4">
+        <div className="bg-gray-900 border-t border-gray-700 p-4 sticky bottom-0">
           {imagePreviews.length > 0 && (
             <div className="mb-4 flex gap-2 flex-wrap">
               {imagePreviews.map((preview, idx) => (
@@ -572,13 +589,13 @@ export default function StudentAIAssistant() {
               onChange={handleImageSelect}
               multiple
             />
-            
+
             <Button
               variant="outline"
               size="icon"
               onClick={() => fileInputRef.current?.click()}
               title="Upload image"
-              className="bg-gray-800 border-gray-600 text-white hover:bg-gray-700"
+              className="bg-gray-800 border-gray-600 text-white hover:bg-gray-700 shrink-0"
             >
               <Image className="w-5 h-5" />
             </Button>
@@ -588,12 +605,12 @@ export default function StudentAIAssistant() {
               size="icon"
               onClick={startCamera}
               title="Take photo"
-              className="bg-gray-800 border-gray-600 text-white hover:bg-gray-700"
+              className="bg-gray-800 border-gray-600 text-white hover:bg-gray-700 shrink-0"
             >
               <Camera className="w-5 h-5" />
             </Button>
 
-            <div className="flex items-center">
+            <div className="flex items-center shrink-0">
               <AudioRecorder
                 onRecordingComplete={handleAudioRecording}
                 audioTrackConstraints={{
@@ -608,7 +625,7 @@ export default function StudentAIAssistant() {
               value={inputMessage}
               onChange={(e) => setInputMessage(e.target.value)}
               placeholder="Ask me anything... (Text, code, questions, analysis)"
-              className="flex-1 min-h-12 max-h-32 bg-gray-800 border-gray-600 text-white placeholder:text-gray-400"
+              className="flex-1 min-h-12 max-h-32 bg-gray-800 border-gray-600 text-white placeholder:text-gray-400 resize-none"
               onKeyDown={(e) => {
                 if (e.key === "Enter" && !e.shiftKey) {
                   e.preventDefault();
@@ -620,7 +637,7 @@ export default function StudentAIAssistant() {
             <Button
               onClick={handleSendMessage}
               disabled={isLoading || (!inputMessage.trim() && selectedImages.length === 0)}
-              className="bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 text-white"
+              className="bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 text-white shrink-0"
             >
               <Send className="w-5 h-5" />
             </Button>
