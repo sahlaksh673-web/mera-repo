@@ -27,7 +27,8 @@ import {
   Volume2,
   Video,
   Edit,
-  MapPin
+  MapPin,
+  Bot
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -1032,6 +1033,7 @@ const StudentDashboard = () => {
             </h2>
             <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-3 sm:gap-4">
               {[
+                { title: "AI Assistant", icon: Bot, color: "from-blue-600 to-purple-600", action: () => navigate('/student-ai-assistant') },
                 { title: "Notifications", icon: Bell, color: "from-red-500 to-pink-500", action: () => navigate('/student-notifications'), badge: studentNotifications.filter(n => n.status === 'unread').length },
                 { title: "View Grades", icon: BarChart3, color: "from-blue-500 to-cyan-500", action: () => setShowGradesModal(true) },
                 { title: "Assignments", icon: FileText, color: "from-green-500 to-emerald-500", action: () => {
